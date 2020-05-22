@@ -443,7 +443,7 @@ class Clcdesq_integration_lib
 	{
 		if(!empty($barcode))
 		{
-			$isbn_candidate = preg_replace("/[^0-9a-zA-Z]/", "", $barcode);
+			$isbn_candidate = preg_replace("/[^0-9xX]/", "", $barcode);
 
 			if(strlen($isbn_candidate) != 10 && strlen($isbn_candidate) != 13)
 			{
