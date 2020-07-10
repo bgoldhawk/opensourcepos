@@ -243,6 +243,11 @@ class Sale_lib
 		$this->CI->session->unset_userdata('sales_quote_number');
 	}
 
+	public function clear_work_order_number()
+	{
+		$this->CI->session->unset_userdata('sales_work_order_number');
+	}
+
 	public function clear_sale_type()
 	{
 		$this->CI->session->unset_userdata('sale_type');
@@ -260,9 +265,7 @@ class Sale_lib
 
 	public function is_invoice_mode()
 	{
-		return ($this->CI->session->userdata('sales_invoice_number_enabled') == 'true' ||
-				$this->CI->session->userdata('sales_mode') == 'sale_invoice' ||
-				($this->CI->session->userdata('sales_invoice_number_enabled') == '1') &&
+		return ($this->CI->session->userdata('sales_mode') == 'sale_invoice' &&
 					$this->CI->config->item('invoice_enable') == TRUE);
 	}
 
@@ -284,16 +287,6 @@ class Sale_lib
 	public function is_work_order_mode()
 	{
 		return ($this->CI->session->userdata('sales_mode') == 'sale_work_order');
-	}
-
-	public function set_invoice_number_enabled($invoice_number_enabled)
-	{
-		return $this->CI->session->set_userdata('sales_invoice_number_enabled', $invoice_number_enabled);
-	}
-
-	public function get_invoice_number_enabled()
-	{
-		return $this->CI->session->userdata('sales_invoice_number_enabled');
 	}
 
 	public function set_price_work_orders($price_work_orders)
@@ -472,29 +465,27 @@ class Sale_lib
 			$prediscount_subtotal= bcadd($prediscount_subtotal, $extended_amount);
 			$total = bcadd($total, $extended_discounted_amount);
 
-			if($this->CI->config->item('tax_included'))
-			{
-				$subtotal = bcadd($subtotal, $this->get_extended_total_tax_exclusive($item['item_id'], $extended_discounted_amount, $item['quantity'], $item['price'], $item['discount'],$item['discount_type']));
-			}
-			else
-			{
-				$subtotal = bcadd($subtotal, $extended_discounted_amount);
-			}
+			$subtotal = bcadd($subtotal, $extended_discounted_amount);
 		}
 
 		$totals['prediscount_subtotal'] = $prediscount_subtotal;
 		$totals['total_discount'] = $total_discount;
-		$totals['subtotal'] = $subtotal;
 		$sales_tax = 0;
 
-		foreach($taxes as $tax_excluded)
+		foreach($taxes as $tax)
 		{
-			if($tax_excluded['tax_type'] == Tax_lib::TAX_TYPE_EXCLUDED)
+			if($tax['tax_type'] === Tax_lib::TAX_TYPE_EXCLUDED)
 			{
-				$total = bcadd($total, $tax_excluded['sale_tax_amount']);
-				$sales_tax = bcadd($sales_tax, $tax_excluded['sale_tax_amount']);
+				$total = bcadd($total, $tax['sale_tax_amount']);
+				$sales_tax = bcadd($sales_tax, $tax['sale_tax_amount']);
+			}
+			else
+			{
+				$subtotal = bcsub($subtotal, $tax['sale_tax_amount']);
 			}
 		}
+
+		$totals['subtotal'] = $subtotal;
 		$totals['total'] = $total;
 		$totals['tax_total'] = $sales_tax;
 
@@ -1046,13 +1037,13 @@ class Sale_lib
 	public function clear_all()
 	{
 		$this->CI->session->set_userdata('sale_id', -1);
-		$this->set_invoice_number_enabled(FALSE);
 		$this->clear_table();
 		$this->empty_cart();
 		$this->clear_comment();
 		$this->clear_email_receipt();
 		$this->clear_invoice_number();
 		$this->clear_quote_number();
+		$this->clear_work_order_number();
 		$this->clear_sale_type();
 		$this->clear_giftcard_remainder();
 		$this->empty_payments();
@@ -1215,19 +1206,19 @@ class Sale_lib
 
 	public function get_item_tax($quantity, $price, $discount, $discount_type, $tax_percentage)
 	{
-		$price = $this->get_item_total($quantity, $price, $discount, $discount_type, TRUE);
+		$item_total = $this->get_item_total($quantity, $price, $discount, $discount_type, TRUE);
 
 		if($this->CI->config->item('tax_included'))
 		{
 			$tax_fraction = bcdiv(bcadd(100, $tax_percentage), 100);
-			$price_tax_excl = bcdiv($price, $tax_fraction);
+			$price_tax_excl = bcdiv($item_total, $tax_fraction);
 
-			return bcsub($price, $price_tax_excl);
+			return bcsub($item_total, $price_tax_excl);
 		}
 
 		$tax_fraction = bcdiv($tax_percentage, 100);
 
-		return bcmul($price, $tax_fraction);
+		return bcmul($item_total, $tax_fraction);
 	}
 
 	public function calculate_subtotal($include_discount = FALSE, $exclude_tax = FALSE)
