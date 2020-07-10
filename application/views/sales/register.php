@@ -86,7 +86,7 @@ if(isset($success))
 					<label for="item" class='control-label'><?php echo $this->lang->line('sales_find_or_scan_item_or_receipt'); ?></label>
 				</li>
 				<li class="pull-left">
-					<?php echo form_input(array('name'=>'item', 'id'=>'item', 'class'=>'form-control input-sm', 'size'=>'50', 'tabindex'=>++$tabindex)); ?>
+					<?php echo form_input(array('name'=>'item', 'placeholder'=> $this->lang->line('sales_start_typing_item_name'),'id'=>'item', 'class'=>'form-control input-sm', 'size'=>'50', 'tabindex'=>++$tabindex)); ?>
 					<span class="ui-helper-hidden-accessible" role="status"></span>
 				</li>
 				<li class="pull-right">
@@ -394,7 +394,7 @@ if(isset($success))
 			?>
 				<div class="form-group" id="select_customer">
 					<label id="customer_label" for="customer" class="control-label" style="margin-bottom: 1em; margin-top: -1em;"><?php echo $this->lang->line('sales_select_customer') . ' ' . $customer_required; ?></label>
-					<?php echo form_input(array('name'=>'customer', 'id'=>'customer', 'class'=>'form-control input-sm', 'value'=>$this->lang->line('sales_start_typing_customer_name')));?>
+					<?php echo form_input(array('name'=>'customer', 'id'=>'customer', 'class'=>'form-control input-sm', 'placeholder'=>$this->lang->line('sales_start_typing_customer_name')));?>
 
 					<button class='btn btn-info btn-sm modal-dlg' data-btn-submit="<?php echo $this->lang->line('common_submit') ?>" data-href="<?php echo site_url("customers/view"); ?>"
 							title="<?php echo $this->lang->line($controller_name. '_new_customer'); ?>">
@@ -705,8 +705,9 @@ $(document).ready(function()
 
 	$('#item').blur(function()
 	{
-		$(this).val("<?php echo $this->lang->line('sales_start_typing_item_name'); ?>");
+		$(this).val("");
 	});
+
 
 	$('#item').autocomplete(
 	{
@@ -743,7 +744,7 @@ $(document).ready(function()
 
 	$('#customer').blur(function()
 	{
-		$(this).val("<?php echo $this->lang->line('sales_start_typing_customer_name'); ?>");
+		$(this).val("");
 	});
 
 	$("#customer").autocomplete(
