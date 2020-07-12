@@ -287,3 +287,4 @@ $lang["config_security_issue"] = "Security Vulnerability Warning";
 $lang["config_perm_risk"] = "Permissions higher than 750 leaves this software at risk.";
 $lang["config_all_set"] = "All file permissions are set correctly!";
 $lang["config_no_risk"] = "No security/vulnerability risks.";
+$lang["config_bar_tab_configuration"] = "";

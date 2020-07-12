@@ -612,6 +612,24 @@ class Config extends Secure_Controller
 		));
 	}
 
+	public function save_tab()
+	{
+		$this->db->trans_start();
+		
+		$tab_enable = $this->input->post('tab_enable') != NULL;
+
+		$this->Appconfig->save('enable_tabs', $tab_enable);
+
+		$this->db->trans_complete();
+
+		$success = $this->db->trans_status();
+
+		echo json_encode(array(
+			'success' => $success,
+			'message' => $this->lang->line('config_saved_' . ($success ? '' : 'un') . 'successfully')
+		));
+	}
+
 	public function save_tables()
 	{
 		$this->db->trans_start();

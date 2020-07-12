@@ -296,3 +296,7 @@ $lang["config_no_risk"] = "No security/vulnerability risks.";
 $lang["config_timezone_error"] = "OSPOS Timezone is Different from your Local Timezone.";
 $lang["config_user_timezone"] = "Local Timezone:";
 $lang["config_os_timezone"] = "OSPOS Timezone:";
+
+$lang["config_tab_configuration"] = "Bar Tab Configuration";
+$lang["config_tab"] = "Bar Tabs";
+$lang["config_tab_enbabled"] = "Enable Bar Tabs";

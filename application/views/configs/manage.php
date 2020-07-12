@@ -36,6 +36,9 @@
 		<a data-toggle="tab" href="#table_tab" title="<?php echo $this->lang->line('config_table_configuration'); ?>"><?php echo $this->lang->line('config_table'); ?></a>
 	</li>
 	<li role="presentation">
+		<a data-toggle="tab" href="#tab_tab" title="<?php echo $this->lang->line('config_tab_configuration'); ?>"><?php echo $this->lang->line('config_tab'); ?></a>
+	</li>
+	<li role="presentation">
 		<a data-toggle="tab" href="#system_tab" title="<?php echo $this->lang->line('config_system_conf'); ?>"><?php echo $this->lang->line('config_system_conf'); ?></a>
 	</li>
 </ul>
@@ -67,6 +70,9 @@
 	</div>
 	<div class="tab-pane" id="reward_tab">
 		<?php $this->load->view("configs/reward_config"); ?>
+	</div>
+	<div class="tab-pane" id="tab_tab">
+		<?php $this->load->view("configs/tab_config"); ?>
 	</div>
 	<div class="tab-pane" id="table_tab">
 		<?php $this->load->view("configs/table_config"); ?>

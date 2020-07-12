@@ -267,6 +267,7 @@ $lang["config_suggestions_third_column"] = "Column 3";
 $lang["config_system_info"] = "System Info";
 $lang["config_table"] = "Table";
 $lang["config_table_configuration"] = "Table Configuration";
+$lang["bar_tab_configuration"] = "Bar Tab Configuration";
 $lang["config_takings_printer"] = "Takings Printer";
 $lang["config_tax"] = "Tax";
 $lang["config_tax_category"] = "Tax Category";
